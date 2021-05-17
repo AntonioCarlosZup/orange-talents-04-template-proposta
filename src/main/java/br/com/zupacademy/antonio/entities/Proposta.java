@@ -3,9 +3,13 @@ package br.com.zupacademy.antonio.entities;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import br.com.zupacademy.antonio.enuns.Status;
 
 @Entity
 public class Proposta {
@@ -30,6 +34,9 @@ public class Proposta {
 	private String email;
 	private String endereco;
 	private BigDecimal salario;
+	
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	public Long getId() {
 		return id;
@@ -55,8 +62,10 @@ public class Proposta {
 		return salario;
 	}
 
-
-
+	public void setStatus(Status status) {
+		this.status = status;
+		
+	}
 
 	@Override
 	public int hashCode() {
@@ -88,5 +97,7 @@ public class Proposta {
 			return false;
 		return true;
 	}
+
+	
 	
 }
