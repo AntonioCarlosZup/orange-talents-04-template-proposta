@@ -1,5 +1,6 @@
-package br.com.zupacademy.antonio.entities;
+package br.com.zupacademy.antonio.dtos;
 
+import br.com.zupacademy.antonio.entities.Cartao;
 import br.com.zupacademy.antonio.enuns.ResultadoSolicitacao;
 import br.com.zupacademy.antonio.enuns.Status;
 
@@ -9,6 +10,7 @@ public class AnaliseDaPropostaResponse {
 	private String nome;
 	private String idProposta;
 	private ResultadoSolicitacao resultadoSolicitacao;
+	private Cartao cartao;
 	
 	public String getDocumento() {
 		return documento;
@@ -26,6 +28,8 @@ public class AnaliseDaPropostaResponse {
 		
 		return resultadoSolicitacao.getStatus();		
 	}
-	
+	public Cartao getCartao() {
+		return cartao;
+	}
 	
 }

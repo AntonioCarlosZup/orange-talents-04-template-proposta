@@ -1,4 +1,4 @@
-package br.com.zupacademy.antonio.entities;
+package br.com.zupacademy.antonio.dtos;
 
 public class AnaliseDePropostaRequest {
 

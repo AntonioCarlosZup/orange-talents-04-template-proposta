@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import br.com.zupacademy.antonio.entities.Proposta;
 
-public class PropostaDto {
+public class PropostaResponse {
   
 	private Long id;
 	private String cpfCnpj;
@@ -15,7 +15,7 @@ public class PropostaDto {
 	private String endereco;
 	private BigDecimal salario;
 	
-	public PropostaDto(Proposta proposta) {
+	public PropostaResponse(Proposta proposta) {
 		
 		this.id = proposta.getId();
 		this.cpfCnpj = proposta.getCpfCnpj();
@@ -26,7 +26,7 @@ public class PropostaDto {
 	}
 	
 	@Deprecated
-	public PropostaDto() {}
+	public PropostaResponse() {}
 	
 	public Long getId() {
 		return id;
@@ -53,11 +53,11 @@ public class PropostaDto {
 		return salario;
 	}
 	
-	public List<PropostaDto> coverterLista(List<Proposta> propostas){
+	public List<PropostaResponse> coverterLista(List<Proposta> propostas){
 		
 		return propostas
 				.stream()
-				.map(PropostaDto::new)
+				.map(PropostaResponse::new)
 				.collect(Collectors.toList());
 	}
 	
