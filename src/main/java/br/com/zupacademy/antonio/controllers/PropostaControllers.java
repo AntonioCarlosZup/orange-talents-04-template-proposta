@@ -1,12 +1,15 @@
 package br.com.zupacademy.antonio.controllers;
 
 import java.net.URI;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,19 +36,19 @@ public class PropostaControllers {
 
 	@Autowired
 	SolicitacaoAnaliseClient analiseClient;
-	
+
 	@Autowired
 	AssociaCartaoSchedule associaCartao;
 
 	@PostMapping
 	// @Transactional - tentar evitar usar pois transforma todo o método em uma
 	// transação
-	public ResponseEntity<?> criarProposta(@RequestBody @Valid PropostaRequest request, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> criarProposta(@RequestBody @Valid PropostaRequest request,
+			UriComponentsBuilder uriBuilder) {
 
 		Optional<Proposta> propostaOpt = propRepository.findByCpfCnpj(request.getCpfCnpj());
 
 		if (propostaOpt.isPresent()) {
-
 			return ResponseEntity.unprocessableEntity().build();
 
 		} else {
@@ -53,39 +56,54 @@ public class PropostaControllers {
 
 			propRepository.save(proposta);
 
-
 			try {
-				
 
-				AnaliseDePropostaRequest analiseRequest = 
-						new AnaliseDePropostaRequest(
-						proposta.getCpfCnpj(),
-						proposta.getNome(), 
-						proposta.getId());
-				
-				AnaliseDaPropostaResponse resultadoDaConsulta = 
-						analiseClient.consulta(analiseRequest);
+				AnaliseDePropostaRequest analiseRequest = new AnaliseDePropostaRequest(proposta.getCpfCnpj(),
+						proposta.getNome(), proposta.getId());
+
+				AnaliseDaPropostaResponse resultadoDaConsulta = analiseClient.consulta(analiseRequest);
 
 				Status status = resultadoDaConsulta.status();
 
 				proposta.setStatus(status);
 
 			} catch (FeignException.UnprocessableEntity unprocessableEntity) {
-				
+
 				proposta.setStatus(Status.NAO_ELEGIVEL);
-				
+
 			}
 
 			propRepository.save(proposta);
 
-			URI uri = uriBuilder.path("/proposta/{id}")
-					.buildAndExpand(proposta.getId()).toUri();
-			
+			URI uri = uriBuilder.path("/proposta/{id}").buildAndExpand(proposta.getId()).toUri();
+
 			associaCartao.VinculoCartaoProposta();
-			
+
 			return ResponseEntity.created(uri).body(new PropostaResponse(proposta));
 		}
 
 	}
+	
+	//-------------------------------------------------------------------------------------------//
+	
+	@GetMapping("/propostas/{id}")
+	public ResponseEntity<?> achaProposta(@PathVariable("id") Long id){			
+		
+		try {
+			
+			Optional<Proposta> proposta = propRepository.findById(id);
+			
+			PropostaResponse response = new PropostaResponse(proposta.get());
+			
+			return ResponseEntity.ok(response);
+		
+		} catch(NoSuchElementException e) {
+			
+			return ResponseEntity.notFound().build();
+			
+		}
+		
+	}
+	
 
 }

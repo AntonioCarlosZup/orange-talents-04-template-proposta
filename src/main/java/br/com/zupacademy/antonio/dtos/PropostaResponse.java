@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import br.com.zupacademy.antonio.entities.Proposta;
+import br.com.zupacademy.antonio.enuns.Status;
 
 public class PropostaResponse {
   
@@ -14,6 +15,7 @@ public class PropostaResponse {
 	private String nome;
 	private String endereco;
 	private BigDecimal salario;
+	private Status status;
 	
 	public PropostaResponse(Proposta proposta) {
 		
@@ -23,6 +25,7 @@ public class PropostaResponse {
 		this.nome = proposta.getNome();
 		this.endereco = proposta.getEndereco();
 		this.salario = proposta.getSalario();
+		this.status = proposta.getStatus();
 	}
 	
 	@Deprecated
@@ -53,6 +56,10 @@ public class PropostaResponse {
 		return salario;
 	}
 	
+	public Status getStatus() {
+		return status;
+	}
+
 	public List<PropostaResponse> coverterLista(List<Proposta> propostas){
 		
 		return propostas
