@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import br.com.zupacademy.antonio.dtos.AnaliseDaPropostaResponse;
 import br.com.zupacademy.antonio.dtos.AnaliseDePropostaRequest;
 
-@FeignClient(name = "solicitacao-analise", url = "http://localhost:9999")
+@FeignClient(name = "solicitacao-analise", url ="${analise.financeira}")
 public interface SolicitacaoAnaliseClient {
 
 	@PostMapping("/api/solicitacao")

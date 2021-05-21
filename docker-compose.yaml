@@ -1,6 +1,34 @@
 version: '3'
 services:
-
+  
+  mysql:
+    image: "mysql:5.7"
+    volumes:
+     - volume-mysql:/var/lib/mysql
+    ports:
+     - 3308:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123abc
+      MYSQL_DATABASE: desafio_proposta
+  proposta:
+    build: 
+      dockerfile: Dockerfile
+      context: .
+    image: "theboy12/proposta" 
+    ports:
+     - 8080:8080
+    container_name: proposta
+    restart: on-failure
+    depends_on: 
+     - mysql
+     - analise
+     - contas
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql:3306/desafio_proposta?createDatabaseIfNotExist=true
+      USERNAME_BD: root
+      PASSWORD_BD: 123abc
+      CLIENT_CARTAO: http://contas:8888
+      CLIENT_ANALISE: http://analise:9999
   zookeeper:
     image: "confluentinc/cp-zookeeper:5.2.1"
     environment:
@@ -138,3 +166,4 @@ volumes:
   grafana-volume:
   prometheus-volume:
   postgres-volume:
+  volume-mysql:
