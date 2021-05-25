@@ -1,11 +1,13 @@
 package br.com.zupacademy.antonio.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -16,7 +18,10 @@ public class Cartao {
 	private LocalDateTime emitidoEm;
 	private String titular;
 	
-	@OneToOne(mappedBy = "cartao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cartao")
+	private List<Biometria> biometria; 
+	
+	@OneToOne(mappedBy = "cartao", fetch = FetchType.LAZY)
 	private Proposta proposta;
 	
 	public Cartao(String id, LocalDateTime emitidoEm, String titular, Proposta proposta) {

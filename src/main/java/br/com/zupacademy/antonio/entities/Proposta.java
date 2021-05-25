@@ -48,7 +48,7 @@ public class Proposta {
 	private String endereco;
 	private BigDecimal salario;
 
-	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	private Cartao cartao;
 
 	@Enumerated(EnumType.STRING)
